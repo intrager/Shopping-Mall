@@ -41,6 +41,9 @@ dependencies {
 
     implementation 'com.querydsl:querydsl-jpa:5.0.0'
     implementation 'com.querydsl:querydsl-apt:5.0.0'
+
+    // 서로 다른 클래스의 값을 필드의 이름과 자료형이 같으면 getter, setter 를 통해 값을 복사해서 객체를 반환함
+    implementation 'org.modelmapper:modelmapper:2.4.5'
 }
 
 tasks.named('test') {

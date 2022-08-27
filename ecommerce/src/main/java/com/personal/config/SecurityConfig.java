@@ -1,7 +1,6 @@
 package com.personal.config;
 
 import com.personal.service.MemberService;
-import com.personal.service.impl.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +18,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final MemberServiceImpl memberServiceImpl;
+    private final MemberService memberService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -50,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(memberServiceImpl)
+        auth.userDetailsService(memberService)
                 .passwordEncoder(passwordEncoder());
     }
 
