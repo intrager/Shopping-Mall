@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 @Getter @Setter
-public class Order {
+public class Order extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "order_id")
     private Long id;
@@ -25,9 +25,6 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;    // 주문 상태
-
-    private LocalDateTime regDate;
-    private LocalDateTime upDate;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,
             orphanRemoval = true, fetch = FetchType.LAZY)
