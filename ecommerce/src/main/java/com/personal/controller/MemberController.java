@@ -3,6 +3,7 @@ package com.personal.controller;
 import com.personal.domain.MemberDto;
 import com.personal.entity.Member;
 import com.personal.service.MemberService;
+import com.personal.service.impl.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -28,13 +29,6 @@ public class MemberController {
     public String memberForm(Model model) {
         model.addAttribute("member", new MemberDto());
         return "member/memberForm";
-    }
-    @PostMapping("/new")
-    public String memberForm(MemberDto memberDto) {
-        Member member = Member.createMember(memberDto, passwordEncoder);
-        memberService.saveMember(member);
-
-        return "redirect:/";
     }
 
     @PostMapping("/new")

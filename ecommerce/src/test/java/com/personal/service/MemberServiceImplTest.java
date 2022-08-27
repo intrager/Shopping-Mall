@@ -2,6 +2,7 @@ package com.personal.service;
 
 import com.personal.domain.MemberDto;
 import com.personal.entity.Member;
+import com.personal.service.impl.MemberServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class MemberServiceTest {
+public class MemberServiceImplTest {
     @Autowired
     MemberService memberService;
 
