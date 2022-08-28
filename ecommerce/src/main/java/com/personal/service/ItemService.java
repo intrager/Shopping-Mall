@@ -2,11 +2,14 @@ package com.personal.service;
 
 import com.personal.domain.ItemFormDto;
 import com.personal.domain.ItemImgDto;
+import com.personal.domain.ItemSearchDto;
 import com.personal.entity.Item;
 import com.personal.entity.ItemImg;
 import com.personal.repository.ItemImgRepository;
 import com.personal.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -79,5 +82,10 @@ public class ItemService {
                     itemImgFileList.get(i));
         }
         return item.getId();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        return itemRepository.getAdminItemPage(itemSearchDto, pageable);
     }
 }
