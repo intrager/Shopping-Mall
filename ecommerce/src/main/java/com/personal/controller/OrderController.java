@@ -61,5 +61,15 @@ public class OrderController {
         model.addAttribute("maxPage", 5);
         return "order/orderHistory";
     }
+
+    @PostMapping("/order/{orderId}/cancel")
+    public @ResponseBody ResponseEntity cancelOrder(@PathVariable("orderId") Long orderId, Principal principal) {
+        /** 자바스크립트에서는 취소할 주문 번호에 대해 조작이 가능하므로, 여기서 주문 취소 권한 검사를 함 */
+        if(!orderService.validateOrder(orderId, principal.getName())) {
+            return new ResponseEntity<String>("주문 취소 권한이 없습니다", HttpStatus.FORBIDDEN);
+        }
+        orderService.cancelOrder(orderId);
+        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+    }
 }
 
