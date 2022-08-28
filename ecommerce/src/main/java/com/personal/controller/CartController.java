@@ -1,16 +1,16 @@
 package com.personal.controller;
 
+import com.personal.domain.CartDetailDto;
 import com.personal.domain.CartItemDto;
 import com.personal.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -44,5 +44,38 @@ public class CartController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
+    }
+
+    @GetMapping("/cart")
+    public String goToOrderHistory(Principal principal, Model model) {
+        /** 현재 로그인한 사용자의 이메일 정보를 이용하여 장바구니에 담겨있는 상품 정보 조회 */
+        List<CartDetailDto> cartDetailList = cartService.getCartList(principal.getName());
+        model.addAttribute("cartItems", cartDetailList);
+        return "cart/cartList";
+    }
+
+    /** 장바구니 상품의 수량만 업데이트하기 위함 */
+    @PatchMapping("/cartItem/{cartItemId}")
+    public @ResponseBody ResponseEntity updateCartItem(@PathVariable("cartItemId") Long cartItemId,
+                                                       int count, Principal principal) {
+        /** 장바구니에 담겨있는 상품의 개수가 0개 이하일 때 */
+        if(count <= 0) {
+            return new ResponseEntity<String>("최소 1개 이상 담아주십시오", HttpStatus.BAD_REQUEST);
+        } else if(!cartService.validateCartItem(cartItemId, principal.getName())) { // 수정 권한 체크
+            return new ResponseEntity<String>("수정 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+        cartService.updateCartItemCount(cartItemId, count);
+        return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/cartItem/{cartItemId}")
+    public @ResponseBody ResponseEntity deleteCartItem(
+            @PathVariable("cartItemId") Long cartItemId, Principal principal) {
+        if(!cartService.validateCartItem(cartItemId, principal.getName())) {
+            return new ResponseEntity<String>("수정 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+        cartService.deleteCartItem(cartItemId);
+        return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
+
     }
 }
