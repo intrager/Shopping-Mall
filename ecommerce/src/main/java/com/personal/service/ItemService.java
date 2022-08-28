@@ -3,6 +3,7 @@ package com.personal.service;
 import com.personal.domain.ItemFormDto;
 import com.personal.domain.ItemImgDto;
 import com.personal.domain.ItemSearchDto;
+import com.personal.domain.MainItemDto;
 import com.personal.entity.Item;
 import com.personal.entity.ItemImg;
 import com.personal.repository.ItemImgRepository;
@@ -87,5 +88,10 @@ public class ItemService {
     @Transactional(readOnly = true)
     public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         return itemRepository.getAdminItemPage(itemSearchDto, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        return itemRepository.getMainItemPage(itemSearchDto, pageable);
     }
 }
